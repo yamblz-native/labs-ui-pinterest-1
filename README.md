@@ -1,4 +1,4 @@
-# labs-printerest-1
+# labs-pinterest-1
 
 Интересные идеи от [Pinterest] , подборка номер 1
 
