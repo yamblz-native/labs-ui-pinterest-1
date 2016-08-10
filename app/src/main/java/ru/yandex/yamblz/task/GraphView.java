@@ -4,14 +4,12 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.RectF;
 import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.view.View;
 
 public class GraphView extends View {
 
-    private RectF bounds;
     private float dataPoints[];
 
     private GraphAnimator graphAnimator;
@@ -37,14 +35,6 @@ public class GraphView extends View {
 
     public GraphView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
-
-    public RectF getBounds() {
-        return bounds;
-    }
-
-    public void setBounds(RectF bounds) {
-        this.bounds = bounds;
     }
 
     public float[] getDataPoints() {
@@ -99,7 +89,6 @@ public class GraphView extends View {
     }
 
     private float getViewPoint(int i, Canvas canvas) {
-        return canvas.getHeight() -
-                (dataPoints[i] - bounds.bottom) / -bounds.height() * canvas.getHeight();
+        return canvas.getHeight() - dataPoints[i] * canvas.getHeight();
     }
 }

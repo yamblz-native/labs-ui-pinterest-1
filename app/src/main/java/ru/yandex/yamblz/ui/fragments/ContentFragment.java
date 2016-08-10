@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnticipateOvershootInterpolator;
+import android.view.animation.Interpolator;
 
 import java.util.Arrays;
 
@@ -20,6 +21,11 @@ import ru.yandex.yamblz.task.InterpolatingGraphAnimator;
 import ru.yandex.yamblz.task.Utils;
 
 public class ContentFragment extends BaseFragment {
+    private final Interpolator interpolator = new AnticipateOvershootInterpolator(3);
+    private final int duration = 700;
+    private final RectF sinRect = new RectF(-10, 5, 10, -5);
+    private final RectF tanRect = new RectF(-5, 5, 5, -5);
+
     @BindView(R.id.graph_view)
     GraphView graphView;
 
@@ -33,8 +39,9 @@ public class ContentFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        graphView.setDataPoints(new float[100]);
-        graphView.setBounds(new RectF(-5, 5, 5, -5));
+        final float[] dataPoints = new float[100];
+        Arrays.fill(dataPoints, 0.5f);
+        graphView.setDataPoints(dataPoints);
         graphView.setStrokeWidth(10);
         graphView.setPaintColor(Color.BLACK);
     }
@@ -42,30 +49,30 @@ public class ContentFragment extends BaseFragment {
     @OnClick(R.id.func_1)
     void func1(@SuppressWarnings("UnusedParameters") View view) {
         float[] newDataPoints = Utils.generateDataPoints(graphView.getDataPoints().length,
-                graphView.getBounds(), arg -> (float) Math.sin(arg));
+                sinRect, arg -> (float) Math.sin(arg));
         float[] oldDataPoints = Arrays
                 .copyOf(graphView.getDataPoints(), graphView.getDataPoints().length);
         graphView.animateGraph(new InterpolatingGraphAnimator(
-                oldDataPoints, newDataPoints, 500, new AnticipateOvershootInterpolator(5)));
+                oldDataPoints, newDataPoints, duration, interpolator));
     }
 
     @OnClick(R.id.func_2)
     void func2(@SuppressWarnings("UnusedParameters") View view) {
         float[] newDataPoints = Utils.generateDataPoints(graphView.getDataPoints().length,
-                graphView.getBounds(), arg -> (float) Math.sin(arg + Math.PI));
+                sinRect, arg -> (float) Math.sin(arg + Math.PI));
         float[] oldDataPoints = Arrays
                 .copyOf(graphView.getDataPoints(), graphView.getDataPoints().length);
         graphView.animateGraph(new InterpolatingGraphAnimator(
-                oldDataPoints, newDataPoints, 500, new AnticipateOvershootInterpolator(5)));
+                oldDataPoints, newDataPoints, duration, interpolator));
     }
 
     @OnClick(R.id.func_3)
     void func3(@SuppressWarnings("UnusedParameters") View view) {
         float[] newDataPoints = Utils.generateDataPoints(graphView.getDataPoints().length,
-                graphView.getBounds(), arg -> (float) Math.atan(arg));
+                tanRect, arg -> (float) Math.atan(arg));
         float[] oldDataPoints = Arrays
                 .copyOf(graphView.getDataPoints(), graphView.getDataPoints().length);
         graphView.animateGraph(new InterpolatingGraphAnimator(
-                oldDataPoints, newDataPoints, 500, new AnticipateOvershootInterpolator(5)));
+                oldDataPoints, newDataPoints, duration, interpolator));
     }
 }

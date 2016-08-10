@@ -3,5 +3,5 @@
     <string name="content">Hello</string>
     <string name="sin">sin(x)</string>
     <string name="sin2">sin(x + pi)</string>
-    <string name="atan">atan</string>
+    <string name="atan">atan(x)</string>
 </resources>
