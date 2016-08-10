@@ -24,7 +24,10 @@ public class ContentFragment extends BaseFragment {
     private final Interpolator interpolator = new AnticipateOvershootInterpolator(3);
     private final int duration = 700;
     private final RectF sinRect = new RectF(-10, 5, 10, -5);
-    private final RectF tanRect = new RectF(-5, 5, 5, -5);
+    private final RectF atanRect = new RectF(-5, 5, 5, -5);
+    private final int sin1Color = Color.RED;
+    private final int sin2Color = Color.GREEN;
+    private final int atanColor = Color.BLUE;
 
     @BindView(R.id.graph_view)
     GraphView graphView;
@@ -43,7 +46,7 @@ public class ContentFragment extends BaseFragment {
         Arrays.fill(dataPoints, 0.5f);
         graphView.setDataPoints(dataPoints);
         graphView.setStrokeWidth(10);
-        graphView.setPaintColor(Color.BLACK);
+        graphView.setColor(Color.BLACK);
     }
 
     @OnClick(R.id.func_1)
@@ -53,7 +56,9 @@ public class ContentFragment extends BaseFragment {
         float[] oldDataPoints = Arrays
                 .copyOf(graphView.getDataPoints(), graphView.getDataPoints().length);
         graphView.animateGraph(new InterpolatingGraphAnimator(
-                oldDataPoints, newDataPoints, duration, interpolator));
+                oldDataPoints, newDataPoints,
+                graphView.getColor(), sin1Color,
+                duration, interpolator));
     }
 
     @OnClick(R.id.func_2)
@@ -63,16 +68,20 @@ public class ContentFragment extends BaseFragment {
         float[] oldDataPoints = Arrays
                 .copyOf(graphView.getDataPoints(), graphView.getDataPoints().length);
         graphView.animateGraph(new InterpolatingGraphAnimator(
-                oldDataPoints, newDataPoints, duration, interpolator));
+                oldDataPoints, newDataPoints,
+                graphView.getColor(), sin2Color,
+                duration, interpolator));
     }
 
     @OnClick(R.id.func_3)
     void func3(@SuppressWarnings("UnusedParameters") View view) {
         float[] newDataPoints = Utils.generateDataPoints(graphView.getDataPoints().length,
-                tanRect, arg -> (float) Math.atan(arg));
+                atanRect, arg -> (float) Math.atan(arg));
         float[] oldDataPoints = Arrays
                 .copyOf(graphView.getDataPoints(), graphView.getDataPoints().length);
         graphView.animateGraph(new InterpolatingGraphAnimator(
-                oldDataPoints, newDataPoints, duration, interpolator));
+                oldDataPoints, newDataPoints,
+                graphView.getColor(), atanColor,
+                duration, interpolator));
     }
 }

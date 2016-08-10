@@ -45,7 +45,11 @@ public class GraphView extends View {
         this.dataPoints = dataPoints;
     }
 
-    public void setPaintColor(int color) {
+    public int getColor() {
+        return paint.getColor();
+    }
+
+    public void setColor(int color) {
         paint.setColor(color);
     }
 
@@ -71,6 +75,7 @@ public class GraphView extends View {
             for (int i = 0; i < dataPoints.length; ++i) {
                 dataPoints[i] = graphAnimator.getDataPoint(i, animationTime);
             }
+            paint.setColor(graphAnimator.getColor(animationTime));
 
             if (animationTime == graphAnimator.getDuration()) {
                 graphAnimator = null;
