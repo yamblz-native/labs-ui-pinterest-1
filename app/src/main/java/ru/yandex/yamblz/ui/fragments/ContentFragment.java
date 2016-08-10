@@ -16,6 +16,7 @@ import java.util.Arrays;
 import butterknife.BindView;
 import butterknife.OnClick;
 import ru.yandex.yamblz.R;
+import ru.yandex.yamblz.task.FloatFunction;
 import ru.yandex.yamblz.task.GraphView;
 import ru.yandex.yamblz.task.InterpolatingGraphAnimator;
 import ru.yandex.yamblz.task.Utils;
@@ -25,9 +26,11 @@ public class ContentFragment extends BaseFragment {
     private final int duration = 700;
     private final RectF sinRect = new RectF(-10, 5, 10, -5);
     private final RectF atanRect = new RectF(-5, 5, 5, -5);
+    private final RectF funcRect = new RectF(-1, 1, 1, -0.5f);
     private final int sin1Color = Color.RED;
     private final int sin2Color = Color.GREEN;
     private final int atanColor = Color.BLUE;
+    private final int funcColor = Color.CYAN;
 
     @BindView(R.id.graph_view)
     GraphView graphView;
@@ -51,37 +54,33 @@ public class ContentFragment extends BaseFragment {
 
     @OnClick(R.id.func_1)
     void func1(@SuppressWarnings("UnusedParameters") View view) {
-        float[] newDataPoints = Utils.generateDataPoints(graphView.getDataPoints().length,
-                sinRect, arg -> (float) Math.sin(arg));
-        float[] oldDataPoints = Arrays
-                .copyOf(graphView.getDataPoints(), graphView.getDataPoints().length);
-        graphView.animateGraph(new InterpolatingGraphAnimator(
-                oldDataPoints, newDataPoints,
-                graphView.getColor(), sin1Color,
-                duration, interpolator));
+        animateFunction(sin1Color, sinRect, arg -> (float) Math.sin(arg));
     }
 
     @OnClick(R.id.func_2)
     void func2(@SuppressWarnings("UnusedParameters") View view) {
-        float[] newDataPoints = Utils.generateDataPoints(graphView.getDataPoints().length,
-                sinRect, arg -> (float) Math.sin(arg + Math.PI));
-        float[] oldDataPoints = Arrays
-                .copyOf(graphView.getDataPoints(), graphView.getDataPoints().length);
-        graphView.animateGraph(new InterpolatingGraphAnimator(
-                oldDataPoints, newDataPoints,
-                graphView.getColor(), sin2Color,
-                duration, interpolator));
+        animateFunction(sin2Color, sinRect, arg -> (float) Math.sin(arg + Math.PI));
     }
 
     @OnClick(R.id.func_3)
     void func3(@SuppressWarnings("UnusedParameters") View view) {
+        animateFunction(atanColor, atanRect, arg -> (float) Math.atan(arg));
+    }
+
+    @OnClick(R.id.func_4)
+    void func4(@SuppressWarnings("UnusedParameters") View view) {
+        animateFunction(funcColor, funcRect,
+                arg -> (float) (arg != 0 ? (arg * Math.sin(1 / arg)) : 0));
+    }
+
+    private void animateFunction(int color, RectF rect, FloatFunction function) {
         float[] newDataPoints = Utils.generateDataPoints(graphView.getDataPoints().length,
-                atanRect, arg -> (float) Math.atan(arg));
+                rect, function);
         float[] oldDataPoints = Arrays
                 .copyOf(graphView.getDataPoints(), graphView.getDataPoints().length);
         graphView.animateGraph(new InterpolatingGraphAnimator(
                 oldDataPoints, newDataPoints,
-                graphView.getColor(), atanColor,
+                graphView.getColor(), color,
                 duration, interpolator));
     }
 }
